@@ -494,23 +494,32 @@ export function AdminPanelView() {
 
       {tab === 'backups' && (
         <div className="bg-white dark:bg-[#11141B] border border-slate-200 dark:border-slate-800 rounded-xl p-6 space-y-4">
-          <div className="flex items-center justify-between">
+          <div className="flex flex-wrap items-center justify-between gap-3">
             <div>
-              <h2 className="text-sm font-semibold">Database Backups & Recovery</h2>
-              <p className="text-xs text-slate-500">Create redacted PostgreSQL state snapshots and download configuration exports.</p>
+              <h2 className="text-sm font-semibold">Database Backups & Source Export</h2>
+              <p className="text-xs text-slate-500">Create redacted PostgreSQL state snapshots or download the clean source code archive (.zip).</p>
             </div>
-            <button
-              type="button"
-              onClick={async () => {
-                await apiFetch('/api/admin/backups', { method: 'POST' });
-                setMsg('Cloud SQL snapshot backup created.');
-                await load();
-              }}
-              className="px-4 py-2 text-xs font-medium rounded-lg bg-indigo-600 text-white inline-flex items-center gap-1.5"
-            >
-              <Database className="w-3.5 h-3.5" />
-              <span>Create Backup</span>
-            </button>
+            <div className="flex items-center gap-2">
+              <a
+                href="/api/admin/export-source"
+                className="px-4 py-2 text-xs font-medium rounded-lg border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 inline-flex items-center gap-1.5 whitespace-nowrap shrink-0"
+              >
+                <Download className="w-3.5 h-3.5" />
+                <span>Download Source Code (.zip)</span>
+              </a>
+              <button
+                type="button"
+                onClick={async () => {
+                  await apiFetch('/api/admin/backups', { method: 'POST' });
+                  setMsg('Cloud SQL snapshot backup created.');
+                  await load();
+                }}
+                className="px-4 py-2 text-xs font-medium rounded-lg bg-indigo-600 text-white inline-flex items-center gap-1.5 whitespace-nowrap shrink-0"
+              >
+                <Database className="w-3.5 h-3.5" />
+                <span>Create Backup</span>
+              </button>
+            </div>
           </div>
           <div className="divide-y divide-slate-200 dark:divide-slate-800">
             {data.backups.map((b) => (

@@ -3,6 +3,7 @@ import http from 'http';
 import path from 'path';
 import fs from 'fs';
 import crypto from 'crypto';
+import { execFile } from 'child_process';
 import bcrypt from 'bcryptjs';
 import cookieParser from 'cookie-parser';
 import multer from 'multer';
@@ -2632,6 +2633,40 @@ async function startServer() {
     if (!backup) return res.status(404).json({ error: 'Backup not found.' });
     res.setHeader('Content-Disposition', `attachment; filename="${backup.filename}"`);
     return res.json(backup.snapshotJson);
+  });
+
+  app.get('/api/admin/export-source', requireAuth, requireSuperAdmin, async (req: AuthRequest, res) => {
+    const tmpZip = path.join('/tmp', `scc-source-${Date.now()}.zip`);
+    const pyScript = `
+import os, zipfile
+root = os.getcwd()
+exclude_dirs = {'node_modules', 'dist', 'uploads', '.git', 'build', 'coverage'}
+with zipfile.ZipFile(${JSON.stringify(tmpZip)}, 'w', zipfile.ZIP_DEFLATED) as zf:
+    for dirpath, dirnames, filenames in os.walk(root):
+        dirnames[:] = [d for d in dirnames if d not in exclude_dirs]
+        for fname in filenames:
+            if fname.startswith('.env') and fname != '.env.example':
+                continue
+            if fname.endswith('.log'):
+                continue
+            full = os.path.join(dirpath, fname)
+            rel = os.path.relpath(full, root)
+            zf.write(full, rel)
+`;
+    execFile('python3', ['-c', pyScript], { cwd: process.cwd() }, async (err) => {
+      if (err || !fs.existsSync(tmpZip)) {
+        console.error('Source zip export error:', err);
+        return res.status(500).json({ error: 'Failed to package source code archive.' });
+      }
+      await writeAuditLog(req.currentUser!.id, req.currentUser!.username, 'SOURCE_EXPORTED', 'system', 'zip', {}, req.ip);
+      res.download(tmpZip, 'social-command-center-source.zip', () => {
+        try {
+          fs.unlinkSync(tmpZip);
+        } catch {
+          // ignore cleanup error
+        }
+      });
+    });
   });
 
   // Start background queue & scheduler worker

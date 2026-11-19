@@ -55,3 +55,28 @@ Configure these exact redirect URIs in your Google Cloud, TikTok Developer, and 
 - `YOUTUBE_CLIENT_ID` / `YOUTUBE_CLIENT_SECRET` (YouTube Data API v3 quota & OAuth consent)
 - `TIKTOK_CLIENT_KEY` / `TIKTOK_CLIENT_SECRET` (TikTok Content Posting API; unaudited apps are restricted to `SELF_ONLY` private posting until TikTok audit passes)
 - `META_APP_ID` / `META_APP_SECRET` (Facebook Pages & Instagram Professional Graph API permissions)
+
+## Free External Hosting Guide (Exact Same App — 100% Free Tier)
+
+Because this app uses a custom Node.js + Express + WebSocket + Multer + Drizzle ORM backend (`server.ts`), deploy it on a free Node.js Web Service host instead of static-only hosts:
+
+### Recommended Free Stack: **Render.com (Free Web Service) + Neon.tech (Free PostgreSQL)**
+1. **Create a Free PostgreSQL Database on [Neon.tech](https://neon.tech)** (or Supabase):
+   - Create a project and copy the connection details:
+     - `SQL_HOST` (e.g., `ep-xxx.aws.neon.tech`)
+     - `SQL_PORT` (`5432`)
+     - `SQL_DB_NAME` (e.g., `neondb`)
+     - `SQL_USER`
+     - `SQL_PASSWORD`
+     - `SQL_SSL` = `true`
+2. **Push Your Code to GitHub** (`https://github.com/imrandevsxr/social_commander_imransdevs`):
+   - Download the `.zip` from AI Studio (**Download App** button in the top-right toolbar), unzip it, and upload/push all files to your GitHub repo (`render.yaml` is already included).
+3. **Deploy on [Render.com](https://render.com) (Free Plan)**:
+   - Click **New +** -> **Blueprint** (or **Web Service**) and connect your GitHub repository.
+   - Build Command: `npm install && npm run build`
+   - Start Command: `npm run db:push && npm start`
+   - Add the Environment Variables (`SQL_HOST`, `SQL_PORT=5432`, `SQL_DB_NAME`, `SQL_USER`, `SQL_PASSWORD`, `SQL_SSL=true`, `APP_URL=https://your-app.onrender.com`, `GEMINI_API_KEY`, `SESSION_SECRET`, `TOKEN_ENCRYPTION_KEY`).
+4. **Update Auth & OAuth Domains for Your New Live URL**:
+   - **Firebase Console -> Authentication -> Settings -> Authorized domains**: Add `your-app.onrender.com` so Google Sign-In & Multi-Gmail Drive Pool work on your new domain.
+   - **Google Cloud / TikTok / Meta OAuth Redirect URIs**: Add `https://your-app.onrender.com/auth/<platform>/callback` (for `youtube`, `tiktok`, `facebook`, `instagram`).
+
