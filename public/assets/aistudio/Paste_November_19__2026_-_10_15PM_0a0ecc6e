@@ -1,0 +1,1367 @@
+# PROJECT: SOCIAL COMMAND CENTER
+## Ultra-Detailed Full-Stack Development Specification
+
+Build a premium, production-ready, cloud-based multi-platform social media publishing and account management application.
+
+The application will allow users to connect multiple YouTube, TikTok, Facebook, and Instagram accounts, manage all accounts from one dashboard, upload one or multiple videos, provide all publishing information in one place, select target accounts, and publish content across multiple social media platforms with one click.
+
+This must be a real, functional application, NOT a UI-only prototype.
+
+Every button, form, navigation item, account connection, publishing action, setting, and dashboard feature must work.
+
+Do not generate fake publishing success messages or simulated account connections.
+
+---
+
+# 1. CORE OBJECTIVE
+
+The primary objective is to create one centralized social media publishing system.
+
+Supported platforms:
+
+1. YouTube
+2. TikTok
+3. Facebook
+4. Instagram
+
+Main workflow:
+
+1. User opens the website.
+2. User authenticates.
+3. User connects any number of social media accounts.
+4. User uploads one or multiple videos.
+5. User enters all available video information in one centralized editor.
+6. The application analyzes the information provided.
+7. The application intelligently maps relevant information to each platform's publishing requirements.
+8. User selects which accounts should receive the video.
+9. All accounts should be selected by default.
+10. User clicks PUBLISH.
+11. The application starts publishing to all selected accounts.
+12. Each platform has its own publishing status and progress.
+13. Successful publishing results are saved in cloud history.
+
+The application must support an unlimited number of connected accounts from the application-design perspective, subject to provider API quotas and account/platform restrictions.
+
+---
+
+# 2. APPLICATION ACCESS AND SECURITY
+
+Create a secure opening screen before showing the application.
+
+## Initial master access
+
+Initial master access secret:
+
+imran.mp3
+
+IMPORTANT SECURITY REQUIREMENTS:
+
+- Never hardcode this secret in frontend JavaScript.
+- Never expose it through API responses.
+- Store only a secure password hash on the server.
+- Use environment variables or a secure initial setup mechanism.
+- Require the administrator to change the initial secret.
+- Implement rate limiting.
+- Implement login attempt monitoring.
+- Implement secure session cookies.
+- Implement logout and session expiration.
+- Add optional two-factor authentication.
+
+The master access mechanism must not replace normal user authentication.
+
+## Registration
+
+Add a REGISTER button on the login page.
+
+Registration form:
+
+- Username
+
+Do not request unnecessary information.
+
+After submitting registration:
+
+- Create a pending user account.
+- Show: "Your registration is awaiting administrator approval."
+- Do not allow access to the application before approval.
+- Save registration requests in the database.
+- Notify the administrator.
+- Allow the administrator to approve or reject the request.
+
+The username must be unique.
+
+For security, after approval, establish a secure authentication method such as an administrator-issued invitation or password setup link. Do not grant permanent access merely because someone knows a username.
+
+## User roles
+
+Create these roles:
+
+1. Super Administrator
+2. Administrator
+3. Approved User
+4. Pending User
+5. Suspended User
+
+Only the Super Administrator can access the complete administrator control panel.
+
+Enforce all role permissions on the backend, not just by hiding frontend buttons.
+
+---
+
+# 3. CLOUD DATABASE AND SYNCHRONIZATION
+
+Everything important must be stored in the cloud.
+
+The application must work across multiple devices.
+
+Example:
+
+- Connect accounts using Computer A.
+- Open the website using Computer B.
+- See the same connected accounts.
+- See the same upload history.
+- See saved videos and metadata.
+- See drafts.
+- See publishing queues.
+- See application settings.
+
+Implement:
+
+- Cloud database.
+- Cloud object storage for videos and thumbnails.
+- Secure authentication.
+- Cross-device synchronization.
+- Automatic saving.
+- Database backups.
+- File retention settings.
+- Account synchronization.
+- Session management.
+
+Never depend on local browser storage as the only source of important application data.
+
+Use a relational database with proper relationships and migrations.
+
+Suggested stack:
+
+- Frontend: Next.js + TypeScript.
+- UI: Tailwind CSS + a professional component library.
+- Backend: Next.js API or a separate secure backend service.
+- Database: PostgreSQL.
+- Authentication: Secure server-side authentication.
+- File storage: S3-compatible cloud object storage.
+- Background jobs: Redis-based queue or equivalent.
+- Real-time updates: WebSockets or server-sent events.
+
+Select reliable providers and document their configuration.
+
+---
+
+# 4. MAIN DASHBOARD
+
+Create a premium dashboard.
+
+Show these statistics:
+
+- Total connected accounts.
+- YouTube accounts.
+- TikTok accounts.
+- Facebook accounts.
+- Instagram accounts.
+- Total uploaded videos.
+- Successfully published posts.
+- Failed publishing attempts.
+- Scheduled posts.
+- Pending uploads.
+- Storage usage.
+- Active publishing jobs.
+
+Dashboard widgets:
+
+1. Recent publishing activity.
+2. Latest uploaded videos.
+3. Publishing queue.
+4. Account connection status.
+5. Recent failures.
+6. Platform performance overview.
+7. Storage usage.
+8. Quick upload button.
+
+Provide a clean sidebar navigation.
+
+Navigation:
+
+- Dashboard
+- Accounts
+- Upload Center
+- Video Library
+- Publishing Queue
+- Publishing History
+- Analytics
+- AI Studio
+- Notifications
+- Settings
+- Admin Panel (authorized administrators only)
+
+---
+
+# 5. MULTI-ACCOUNT MANAGEMENT
+
+This is one of the most important features.
+
+Create a complete Accounts Management section.
+
+## Platform account connection
+
+Provide separate connection buttons:
+
+- Connect YouTube
+- Connect TikTok
+- Connect Facebook
+- Connect Instagram
+
+Use official OAuth authorization and supported publishing APIs.
+
+Do not ask users to submit their social media passwords directly.
+
+Store OAuth access and refresh tokens securely, encrypted at rest.
+
+Support multiple accounts from every platform.
+
+Examples:
+
+- 10 YouTube accounts.
+- 20 TikTok accounts.
+- 15 Facebook Pages.
+- 12 Instagram professional accounts.
+
+These are examples, not application limits.
+
+## Account cards
+
+Each connected account should have:
+
+- Platform logo.
+- Account display name.
+- Username or Page name.
+- Profile picture.
+- Account identifier.
+- Connection status.
+- Last synchronization time.
+- Permission status.
+- Reauthorization status.
+- Disconnect button.
+- Account settings button.
+
+## Account groups
+
+Allow users to create custom account groups.
+
+Examples:
+
+- Gaming Accounts
+- Business Accounts
+- Entertainment
+- Personal Accounts
+- International Accounts
+
+Allow selecting multiple accounts at once.
+
+## Account selection
+
+The publishing interface must contain a dedicated account selection section.
+
+CRITICAL REQUIREMENT:
+
+ALL CONNECTED AND ELIGIBLE ACCOUNTS MUST BE SELECTED BY DEFAULT.
+
+The user can:
+
+- Select all accounts.
+- Deselect all accounts.
+- Select individual accounts.
+- Select all YouTube accounts.
+- Select all TikTok accounts.
+- Select all Facebook accounts.
+- Select all Instagram accounts.
+- Select custom account groups.
+
+Display selected account counts.
+
+Example:
+
+Selected: 12 / 20 accounts
+
+Allow the user to save account selection presets.
+
+Remember the last selection as a convenience, but use all eligible accounts by default when no saved selection preset exists.
+
+Never publish to an account that the user has deselected.
+
+---
+
+# 6. CENTRALIZED UPLOAD CENTER
+
+Create the most important section of the application.
+
+Name: UNIVERSAL UPLOAD CENTER.
+
+The entire video publishing workflow must happen here.
+
+The user must be able to provide all information in one place.
+
+## Video upload
+
+Support:
+
+- Drag and drop.
+- Browse files.
+- Multiple video uploads.
+- Batch uploads.
+- Upload progress.
+- File validation.
+- File size validation.
+- Video duration detection.
+- Resolution detection.
+- Aspect ratio detection.
+- Codec information.
+- File format detection.
+- Thumbnail extraction.
+
+Allow multiple videos to be added to one publishing batch.
+
+Every video must have its own metadata and account selection.
+
+## Centralized information editor
+
+Create visible input boxes for all possible publishing information.
+
+Do not hide important fields behind multiple menus.
+
+Use a clean organized layout with expandable sections where necessary.
+
+### General information
+
+1. Video title
+2. Description
+3. Main caption
+4. Hashtags
+5. Keywords
+6. Tags
+7. Thumbnail
+8. Alternative thumbnail
+9. Cover image
+10. Category
+11. Language
+12. Location
+13. Alt text
+14. Content warnings
+15. Custom notes
+
+### Publishing options
+
+16. Privacy
+17. Visibility
+18. Allow comments
+19. Allow embedding
+20. Audience settings
+21. Age restriction
+22. Made-for-kids selection
+23. Content disclosure
+24. Branded content information
+25. Copyright-related declarations
+26. Platform-specific publishing options
+
+### Optional platform-specific metadata
+
+27. YouTube title
+28. YouTube description
+29. YouTube tags
+30. YouTube category
+31. TikTok caption
+32. TikTok privacy
+33. TikTok interaction permissions
+34. Instagram caption
+35. Instagram location
+36. Facebook caption
+37. Facebook Page destination
+
+Do not force the user to fill every field.
+
+All fields should be optional unless a platform requires a specific field.
+
+---
+
+# 7. INTELLIGENT METADATA DISTRIBUTION ENGINE
+
+THIS IS A CRITICAL FEATURE.
+
+The user will provide all available information once.
+
+The system must intelligently determine which information belongs to which platform.
+
+Example:
+
+The user provides:
+
+1. Title: The Future of Artificial Intelligence
+2. Description: A short explanation of AI technology.
+3. Hashtags: #AI #Technology #Future
+4. Tags: artificial intelligence, technology
+5. Thumbnail: thumbnail.jpg
+6. Privacy: Public
+7. Location: Bangladesh
+8. Category: Education
+9. Allow comments: Yes
+10. Custom notes: Publish immediately.
+
+The application must not blindly send all 10 pieces of information to every platform.
+
+Instead, create a metadata mapping engine.
+
+Example:
+
+YouTube:
+- Title
+- Description
+- Tags
+- Thumbnail
+- Privacy
+- Category
+- Audience settings where applicable
+
+TikTok:
+- Caption assembled from relevant title and hashtags
+- Video
+- Privacy
+- Interaction settings where supported
+
+Instagram:
+- Caption
+- Hashtags
+- Video
+- Cover image where supported
+- Location where supported
+
+Facebook:
+- Video
+- Description or caption
+- Thumbnail where supported
+- Page destination
+- Available publishing settings
+
+The actual fields and requirements must follow each platform's current official API.
+
+## Mapping rules
+
+1. Detect which fields are relevant to each platform.
+2. Identify required fields.
+3. Identify optional fields.
+4. Ignore irrelevant information.
+5. Preserve the original user-provided information.
+6. Do not invent missing information.
+7. Do not send unsupported fields.
+8. Do not silently discard user data.
+9. Allow users to override automatic mapping.
+10. Display a preview of the final metadata for each destination account.
+
+## Gemini-powered metadata assistant
+
+Integrate Gemini AI to assist with:
+
+- Metadata classification.
+- Caption formatting.
+- Hashtag selection.
+- Title generation.
+- Description generation.
+- Platform-specific formatting.
+- Character limit checking.
+- Missing information detection.
+
+AI must never publish without the user's explicit publishing command.
+
+Provide a toggle:
+
+AI Metadata Mapping: ON / OFF
+
+When OFF, use deterministic field mapping.
+
+When ON, use Gemini for intelligent assistance.
+
+Never change the user's original metadata without permission.
+
+---
+
+# 8. PLATFORM-SPECIFIC PUBLISHING ENGINE
+
+Build four separate publishing adapters.
+
+Each adapter must have its own validation, upload, processing, and error-handling logic.
+
+## YouTube
+
+Use the official YouTube Data API.
+
+Support:
+
+- Video upload.
+- Title.
+- Description.
+- Tags.
+- Thumbnail upload where supported.
+- Category.
+- Privacy settings.
+- Made-for-kids declaration.
+- Playlist selection where supported.
+- Scheduled publishing where supported.
+
+Handle resumable uploads for large files.
+
+Check API quota before starting uploads.
+
+## TikTok
+
+Use TikTok's official Content Posting API.
+
+Support the features available to the authorized application.
+
+Implement:
+
+- Video upload.
+- Caption.
+- Privacy selection.
+- Interaction permissions.
+- Cover settings where supported.
+- Publishing status polling.
+
+IMPORTANT:
+
+TikTok API access, app review, creator authorization, and publishing audit requirements must be respected.
+
+Do not pretend that an unaudited application can publicly publish when the platform restricts it to private publishing.
+
+## Facebook
+
+Use Meta's official Graph API.
+
+Support eligible Facebook Pages and permitted publishing destinations.
+
+Implement:
+
+- Video publishing.
+- Reels publishing where supported.
+- Caption.
+- Description.
+- Thumbnail options where supported.
+- Page selection.
+- Publishing status.
+
+Request only the required permissions.
+
+## Instagram
+
+Use Meta's official Instagram publishing API.
+
+Support eligible Instagram Professional accounts.
+
+Implement:
+
+- Reels publishing.
+- Video publishing where supported.
+- Caption.
+- Cover image options where supported.
+- Location where supported.
+- Publishing status monitoring.
+
+Respect media specifications and account permissions.
+
+---
+
+# 9. ONE-CLICK PUBLISHING
+
+Create one large primary button:
+
+PUBLISH TO SELECTED ACCOUNTS
+
+Before publishing, show a confirmation screen.
+
+Example:
+
+Video: my_video.mp4
+
+Selected destinations:
+- YouTube Account 1
+- YouTube Account 2
+- TikTok Account 1
+- Facebook Page 1
+- Instagram Account 1
+
+Total destinations: 5
+
+Show a separate metadata preview for each destination.
+
+Then allow:
+
+PUBLISH NOW
+
+When clicked:
+
+1. Validate the video.
+2. Validate every selected account.
+3. Validate platform-specific metadata.
+4. Check permissions.
+5. Check publishing restrictions.
+6. Create individual publishing jobs.
+7. Add jobs to the background queue.
+8. Start uploading.
+9. Monitor each job independently.
+10. Save all results.
+
+The publishing process must not block the entire application.
+
+If one platform fails, continue publishing to the others.
+
+Do not restart successful uploads because another account failed.
+
+## Publishing status
+
+Each destination must show one of these statuses:
+
+- Waiting
+- Validating
+- Uploading
+- Processing
+- Publishing
+- Published
+- Failed
+- Requires authorization
+- Requires manual action
+- Cancelled
+
+Show individual progress bars.
+
+Show error messages with understandable explanations.
+
+Add retry buttons for failed jobs.
+
+Avoid duplicate posts through idempotency keys and duplicate-job checks.
+
+---
+
+# 10. MULTIPLE VIDEO BATCH PUBLISHING
+
+Support uploading multiple videos together.
+
+Example:
+
+Video 1 → 10 selected accounts.
+
+Video 2 → 5 selected accounts.
+
+Video 3 → 20 selected accounts.
+
+Every video must have:
+
+- Separate metadata.
+- Separate account selection.
+- Separate publishing configuration.
+- Separate publishing status.
+- Separate retry options.
+
+Add:
+
+- Select all videos.
+- Remove selected videos.
+- Duplicate metadata.
+- Copy metadata from another video.
+- Apply metadata to multiple videos.
+- Apply account selection to multiple videos.
+- Publish selected videos.
+- Save all as drafts.
+
+Never accidentally publish a video twice.
+
+---
+
+# 11. VIDEO LIBRARY
+
+Create a cloud-based video library.
+
+Features:
+
+- Uploaded videos.
+- Draft videos.
+- Published videos.
+- Failed videos.
+- Archived videos.
+- Search.
+- Filters.
+- Sorting.
+- Date filtering.
+- Platform filtering.
+- Account filtering.
+- Video preview.
+- Metadata editing.
+- Duplicate video detection.
+- Delete and archive options.
+
+Allow users to reuse old videos with new metadata.
+
+Keep original media files separate from platform-specific processed versions.
+
+---
+
+# 12. PUBLISHING QUEUE AND SCHEDULER
+
+Create a professional queue management system.
+
+Features:
+
+- Immediate publishing.
+- Scheduled publishing.
+- Queue management.
+- Pause queue.
+- Resume queue.
+- Cancel pending jobs.
+- Reorder jobs.
+- Retry failed jobs.
+- Account-specific scheduling.
+
+Show:
+
+- Video name.
+- Platform.
+- Destination account.
+- Scheduled date.
+- Scheduled time.
+- Publishing status.
+
+Use the user's selected timezone.
+
+Check whether scheduling is supported by each platform. Where native scheduling is unavailable, schedule the publishing request on the application's own backend.
+
+The scheduler must work even when the user's computer is turned off.
+
+---
+
+# 13. GEMINI AI INTEGRATION
+
+Create a separate section:
+
+GEMINI AI CONTROL CENTER
+
+Allow the administrator to configure the Gemini API.
+
+## API settings
+
+Fields:
+
+- Gemini API Key
+- Model selection
+- Temperature
+- Maximum output tokens
+- Enable/disable Gemini
+- API connection status
+
+Buttons:
+
+- Save API Key
+- Test Connection
+- Check Available Models
+- Clear API Key
+- Enable Gemini
+- Disable Gemini
+
+Store the key securely on the backend.
+
+Never expose the key in browser source code or client-side API calls.
+
+## Gemini capabilities
+
+Gemini should assist with:
+
+- Metadata distribution.
+- Caption editing.
+- Hashtag suggestions.
+- Video title suggestions.
+- Description generation.
+- Platform compatibility checking.
+- Content analysis.
+- Duplicate metadata detection.
+- Missing field detection.
+- Publishing error explanations.
+
+## Gemini as website administration assistant
+
+Add an AI ADMINISTRATOR ASSISTANT.
+
+This is an assistant for the authorized administrator, not an unrestricted superuser.
+
+The assistant can:
+
+- Explain account problems.
+- Analyze publishing failures.
+- Review system logs.
+- Suggest application configuration changes.
+- Detect unusual activity.
+- Explain API quota issues.
+- Help manage publishing queues.
+- Generate metadata.
+- Diagnose connection errors.
+- Recommend maintenance actions.
+
+Sensitive operations must require administrator confirmation.
+
+Gemini must never be allowed to:
+- Read plaintext OAuth secrets unnecessarily.
+- Reveal users' credentials.
+- Change the Super Administrator.
+- Bypass role permissions.
+- Approve its own access.
+- Delete accounts without confirmation.
+- Execute arbitrary server commands.
+
+Create an AI chat interface with conversation history.
+
+---
+
+# 14. ADMIN CONTROL PANEL
+
+Create a complete administrator dashboard.
+
+Only the authorized Super Administrator can access it.
+
+The initial administrator setup must use the initial access secret, securely verified on the backend.
+
+## A. Overview
+
+Show:
+
+- Total users.
+- Approved users.
+- Pending users.
+- Suspended users.
+- Total connected accounts.
+- Total publishing jobs.
+- Successful posts.
+- Failed posts.
+- Cloud storage usage.
+- API usage.
+- Gemini usage.
+- System health.
+
+## B. User management
+
+Features:
+
+- View all users.
+- Search users.
+- Approve registrations.
+- Reject registrations.
+- Suspend users.
+- Reactivate users.
+- Delete users.
+- Change user roles.
+- View registration dates.
+- View last login.
+- View user activity.
+- Manage account limits if needed.
+
+Never allow an ordinary administrator to promote themselves to Super Administrator.
+
+## C. Registration management
+
+Create a pending registration queue.
+
+Each registration should display:
+
+- Username.
+- Registration date.
+- Approval status.
+- Approve button.
+- Reject button.
+
+## D. Platform management
+
+Show platform integration status:
+
+- YouTube API.
+- TikTok API.
+- Facebook API.
+- Instagram API.
+
+Show:
+
+- OAuth configuration status.
+- API health.
+- Permission status.
+- Quota usage where available.
+- Error logs.
+- Configuration status.
+
+## E. Gemini management
+
+Include all Gemini settings, API key management, model selection, connection tests, AI enable/disable switches, and usage monitoring.
+
+## F. System configuration
+
+Allow the Super Administrator to configure:
+
+- Application name.
+- Application logo.
+- Registration settings.
+- User approval settings.
+- Maximum upload file size.
+- Allowed video formats.
+- Cloud storage settings.
+- Session expiration.
+- Maintenance mode.
+- Notification settings.
+- Backup settings.
+- Default timezone.
+- Default publishing behavior.
+
+## G. Activity logs
+
+Maintain an audit log of:
+
+- Login attempts.
+- Registration requests.
+- User approvals.
+- Account connections.
+- Account disconnections.
+- Metadata modifications.
+- Publishing actions.
+- Failed publishing attempts.
+- API configuration changes.
+- Administrative actions.
+
+Never log plaintext passwords, API keys, or access tokens.
+
+## H. Backup and recovery
+
+Allow authorized administrators to:
+
+- Create database backups.
+- View backup history.
+- Monitor backup health.
+- Restore backups with explicit confirmation.
+- Export system configuration safely.
+
+## I. Security controls
+
+Include:
+
+- Active sessions.
+- Session revocation.
+- Login attempt monitoring.
+- Rate limiting.
+- Security alerts.
+- Password reset management.
+- Role-based access.
+- Audit log inspection.
+
+---
+
+# 15. NOTIFICATIONS
+
+Create an internal notification center.
+
+Notify users when:
+
+- Video upload completes.
+- Publishing starts.
+- Publishing succeeds.
+- Publishing fails.
+- An account needs reauthorization.
+- A scheduled post is approaching.
+- A scheduled post is published.
+- Storage is almost full.
+- API quota is nearly exhausted.
+
+Provide read/unread states.
+
+Add optional email notifications if configured.
+
+---
+
+# 16. ANALYTICS
+
+Create a basic analytics dashboard.
+
+Display available information from authorized platform APIs.
+
+Include:
+
+- Published videos.
+- Views.
+- Likes.
+- Comments.
+- Shares.
+- Engagement metrics.
+- Account-level performance.
+- Platform-level performance.
+
+Do not fabricate missing metrics.
+
+Clearly show when a platform does not provide a particular metric through its API.
+
+Allow date filtering and account filtering.
+
+---
+
+# 17. DESIGN AND USER EXPERIENCE
+
+The interface must look like a premium modern SaaS product.
+
+Design inspiration:
+
+- Linear
+- Vercel
+- Stripe Dashboard
+- Modern cloud management panels
+
+Design requirements:
+
+- Dark mode by default.
+- Light mode option.
+- Professional typography.
+- Clean spacing.
+- Rounded cards.
+- Subtle animations.
+- Responsive layout.
+- Desktop-first design.
+- Tablet compatibility.
+- Mobile compatibility.
+- Consistent icons.
+- Clear navigation.
+- No unnecessary visual clutter.
+
+Use a consistent design system.
+
+Important buttons must have proper loading states and disabled states.
+
+Display meaningful empty states.
+
+Add confirmation dialogs before destructive actions.
+
+Never use decorative controls that do nothing.
+
+---
+
+# 18. TECHNICAL ARCHITECTURE
+
+Use a modular architecture.
+
+Suggested modules:
+
+1. Authentication service.
+2. User management service.
+3. Account connection service.
+4. OAuth token management service.
+5. Media upload service.
+6. Video metadata service.
+7. Metadata mapping engine.
+8. Gemini integration service.
+9. YouTube publishing adapter.
+10. TikTok publishing adapter.
+11. Facebook publishing adapter.
+12. Instagram publishing adapter.
+13. Background job service.
+14. Scheduler service.
+15. Notification service.
+16. Analytics service.
+17. Audit logging service.
+18. Administration service.
+
+Each publishing adapter must be independent.
+
+Use a shared publishing interface with platform-specific implementations.
+
+The frontend must never directly access private platform API secrets.
+
+Use secure backend API routes.
+
+Implement database transactions where needed.
+
+Use structured logging.
+
+Implement retries with exponential backoff.
+
+Handle rate limits correctly.
+
+Support resumable media uploads where available.
+
+Keep each publishing destination's result independent.
+
+---
+
+# 19. DATABASE DESIGN
+
+Create proper database tables.
+
+Suggested tables:
+
+- users
+- user_roles
+- registration_requests
+- user_sessions
+- social_accounts
+- oauth_tokens
+- account_groups
+- account_group_members
+- media_files
+- video_metadata
+- metadata_fields
+- metadata_mappings
+- upload_batches
+- publishing_jobs
+- publishing_job_logs
+- publishing_results
+- scheduled_posts
+- notification_records
+- application_settings
+- platform_integrations
+- gemini_settings
+- audit_logs
+- backup_records
+
+Use appropriate foreign keys and indexes.
+
+Ensure user data isolation.
+
+A normal user must never access another user's private accounts, videos, or tokens.
+
+---
+
+# 20. API AND PLATFORM COMPLIANCE
+
+Use official APIs and authorized publishing mechanisms.
+
+Do not build the core publishing system around:
+- Browser automation.
+- Password-based account scraping.
+- Undocumented private APIs.
+- CAPTCHA bypass.
+- Session-cookie theft.
+- Unauthorized automated login.
+
+Follow the current developer documentation and platform policies.
+
+Document:
+
+- Required developer applications.
+- OAuth setup.
+- Required permissions.
+- App review requirements.
+- Publishing restrictions.
+- API quotas.
+- Supported media formats.
+- Account eligibility.
+
+If a platform feature requires approval, display its status clearly.
+
+Never claim that a platform is connected or capable of public publishing when it is not.
+
+---
+
+# 21. ERROR HANDLING AND RELIABILITY
+
+Implement proper error handling throughout the system.
+
+Examples:
+
+- Invalid API key.
+- Expired authorization.
+- Missing permission.
+- Unsupported video format.
+- Video exceeds platform limits.
+- Missing required metadata.
+- API quota exhausted.
+- Upload timeout.
+- Network failure.
+- Publishing rejected.
+- Duplicate job.
+- Cloud storage failure.
+
+For every error:
+
+1. Identify the affected account.
+2. Identify the affected video.
+3. Identify the affected platform.
+4. Display the actual error.
+5. Suggest a solution.
+6. Allow retry when safe.
+
+Never mark a failed job as successful.
+
+Never lose successful publishing results when another platform fails.
+
+---
+
+# 22. DEVELOPMENT PHASES
+
+Build the application in properly tested phases.
+
+PHASE 1:
+- Project setup.
+- Database.
+- Authentication.
+- Registration.
+- Admin approval.
+- Role management.
+- Secure dashboard.
+
+PHASE 2:
+- Cloud storage.
+- Account management.
+- OAuth connections.
+- Multiple account support.
+- Account groups.
+
+PHASE 3:
+- Upload center.
+- Multi-video upload.
+- Centralized metadata editor.
+- Intelligent metadata mapping.
+- Video library.
+
+PHASE 4:
+- YouTube integration.
+- TikTok integration.
+- Facebook integration.
+- Instagram integration.
+
+PHASE 5:
+- Publishing queue.
+- One-click publishing.
+- Individual progress.
+- Retry system.
+- Scheduling.
+
+PHASE 6:
+- Gemini integration.
+- AI metadata assistant.
+- AI administrator assistant.
+- API configuration panel.
+
+PHASE 7:
+- Analytics.
+- Notifications.
+- Audit logs.
+- Backup system.
+- Advanced administrator tools.
+
+PHASE 8:
+- Security testing.
+- Cross-device testing.
+- API integration testing.
+- Performance optimization.
+- Deployment.
+
+Do not skip phases.
+
+Do not pretend an integration is complete when only its interface exists.
+
+---
+
+# 23. TESTING REQUIREMENTS
+
+Test the entire application.
+
+Required scenarios:
+
+1. Register a new username.
+2. Approve the registration as Super Administrator.
+3. Log in from another device.
+4. Connect multiple accounts.
+5. Disconnect an account.
+6. Reauthorize an expired account.
+7. Upload one video.
+8. Upload multiple videos.
+9. Enter 10 different metadata fields.
+10. Verify intelligent metadata distribution.
+11. Select only two accounts.
+12. Verify that only those accounts receive publishing jobs.
+13. Verify all eligible accounts are selected by default.
+14. Publish one video to multiple platforms.
+15. Simulate a failed destination.
+16. Confirm successful destinations remain successful.
+17. Retry a failed destination.
+18. Schedule a video.
+19. Verify cloud synchronization.
+20. Test Gemini API configuration.
+21. Test admin permission restrictions.
+22. Test unauthorized access attempts.
+23. Test mobile responsiveness.
+24. Test backup and recovery.
+
+Use sandbox or test environments where available.
+
+Do not use real public posts for integration testing without explicit authorization.
+
+---
+
+# 24. FINAL DELIVERY REQUIREMENTS
+
+Deliver:
+
+- Complete frontend.
+- Complete backend.
+- Database schema and migrations.
+- OAuth integration modules.
+- Platform publishing adapters.
+- Gemini integration.
+- Admin control panel.
+- Cloud storage integration.
+- Background worker.
+- Scheduler.
+- Environment variable example file.
+- Deployment instructions.
+- Local development instructions.
+- API setup documentation.
+- Security documentation.
+- Testing instructions.
+
+Provide a complete README.
+
+Include a clear checklist of which features are:
+- Fully implemented.
+- Awaiting API credentials.
+- Awaiting platform approval.
+- Awaiting deployment configuration.
+
+Do not leave broken placeholder buttons.
+
+Do not use mock data in production.
+
+Do not hardcode secrets.
+
+Do not expose sensitive account information.
+
+The finished application must be genuinely usable.
+
+# FINAL INSTRUCTION TO THE AI DEVELOPER
+
+Act as a senior full-stack architect, backend engineer, frontend developer, security engineer, database architect, and API integration specialist.
+
+Prioritize functionality, security, reliability, scalability, and user experience.
+
+Before implementing any platform integration, verify its current official API documentation.
+
+Build real working features rather than producing an impressive-looking but nonfunctional prototype.
+
+If a required API credential or platform approval is missing, implement the integration properly, clearly identify the missing requirement, and provide setup instructions.
+
+Do not stop after generating the dashboard UI.
+
+Continue until the application has a tested, deployable end-to-end implementation.
+
+The ultimate goal is:
+
+ONE WEBSITE.
+UNLIMITED CONNECTED ACCOUNTS.
+ONE CENTRALIZED VIDEO EDITOR.
+ONE METADATA INPUT.
+SMART PLATFORM-SPECIFIC DISTRIBUTION.
+SELECT ONLY THE ACCOUNTS I WANT.
+ONE-CLICK MULTI-PLATFORM PUBLISHING.
